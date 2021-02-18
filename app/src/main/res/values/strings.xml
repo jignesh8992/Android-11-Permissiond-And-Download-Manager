@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Android11Permissions</string>
     <string name="browse_album">Browse Album</string>
+    <string name="save_bitmap">Save Bitmap</string>
     <string name="add_image_to_album">Add Image To Album</string>
     <string name="download_file">Download File</string>
     <string name="pick_file">Pick File</string>

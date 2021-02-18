@@ -1,4 +1,4 @@
-package com.example.androidpermissions
+package com.example.androidpermissions.asynctask
 
 import android.app.ProgressDialog
 import android.content.ContentValues
@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import com.example.androidpermissions.callback.DownloadListener
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -17,19 +18,27 @@ val fileName = "android.txt"*/
 
 const val srcURL = "https://www.pexels.com/video/1828452/download/?search_query=&tracking_id=1altbyzu6rp"
 const val fileName = "Pexels_Videos_1828452.mp4"
-val destURL = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path + File.separator + fileName
-lateinit var outputPath: String
-lateinit var error: String
+
+lateinit var destURL: String
+
+
+private lateinit var outputPath: String
+private lateinit var error: String
+
 
 /**
- * Background Async Task to download file
+ * DownloadFileFromURLTask.kt - Download file from the URL to the external storage with support of Android 11
+ * @author:  Jignesh N Patel
+ * @date: 18-Feb-2021 10:32 AM
  */
-class DownloadFileFromURL(val mContext: Context, private val downloadListener: DownloadListener) : AsyncTask<String?, Int?, Boolean>() {
+
+class DownloadFileFromURLTask(val mContext: Context, private val outputDir: String, private val downloadListener: DownloadListener) : AsyncTask<String?, Int?, Boolean>() {
     private var progressDialog: ProgressDialog? = null
     private val TAG = javaClass.simpleName
 
 
     init {
+        // initialization of ProgressDialog
         progressDialog = ProgressDialog(mContext)
         progressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog!!.setCancelable(false)
@@ -38,8 +47,7 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
 
 
     /**
-     * Before starting background thread
-     * Show Progress Bar Dialog
+     * Before starting download show ProgressDialog with download percentage
      */
     override fun onPreExecute() {
         super.onPreExecute()
@@ -49,7 +57,7 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
     }
 
     /**
-     * Downloading file in background thread
+     * Downloading file in doInBackground
      */
     override fun doInBackground(vararg f_url: String?): Boolean {
         Log.i(TAG, "Downloading source url: $srcURL")
@@ -70,6 +78,22 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
             // Output stream to write file
             val outputStream: OutputStream?
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+
+                // first we create app name folder direct to the root directory
+                destURL = Environment.getExternalStorageDirectory().path + File.separator + outputDir
+                var desFile = File(destURL)
+                if (!desFile.exists()) {
+                    desFile.mkdir()
+                }
+
+                // once the app name directory created we create download directory inside app directory
+                destURL = destURL + File.separator + Environment.DIRECTORY_DOWNLOADS
+                desFile = File(destURL)
+                if (!desFile.exists()) {
+                    desFile.mkdir()
+                }
+
+                destURL = destURL + File.separator + fileName
 
                 // final output path
                 outputPath = destURL
@@ -99,11 +123,11 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
 
                 var desDirectory = Environment.DIRECTORY_DOWNLOADS
                 // If you want to create custom directory inside Download directory only
-                /* desDirectory = desDirectory + File.separator + "Jignesh"
-                 val desFile = File(desDirectory)
-                 if (!desFile.exists()) {
-                     desFile.mkdir()
-                 }*/
+                desDirectory = desDirectory + File.separator + outputDir
+                val desFile = File(desDirectory)
+                if (!desFile.exists()) {
+                    desFile.mkdir()
+                }
                 // final output path
                 outputPath = desDirectory + File.separator + fileName
 
@@ -136,7 +160,7 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
             return !isCancelled
         } catch (e: Exception) {
             error = e.toString()
-            Log.e(TAG, "Exception: " + e.toString())
+            Log.e(TAG, "Exception: $e")
         }
         return false
     }
@@ -163,11 +187,6 @@ class DownloadFileFromURL(val mContext: Context, private val downloadListener: D
             downloadListener.onFailure(error)
         }
 
-    }
-
-    interface DownloadListener {
-        fun onSuccess(path: String)
-        fun onFailure(error: String)
     }
 
 }

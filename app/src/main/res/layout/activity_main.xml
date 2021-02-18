@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="@dimen/_20sdp">
 
@@ -14,6 +16,16 @@
         android:onClick="onClick"
         android:text="@string/download_file"
         android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btnSaveBitmap"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:onClick="onClick"
+        android:text="@string/save_bitmap"
+        android:textAllCaps="false"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/btnAddImageToAlbum"
