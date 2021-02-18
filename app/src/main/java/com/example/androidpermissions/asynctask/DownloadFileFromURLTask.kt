@@ -16,8 +16,8 @@ import java.net.URL
 /*val fileUrl = "http://guolin.tech/android.txt"
 val fileName = "android.txt"*/
 
-const val srcURL = "https://www.pexels.com/video/1828452/download/?search_query=&tracking_id=1altbyzu6rp"
-const val fileName = "Pexels_Videos_1828452.mp4"
+const val srcURL = "https://flyermaker.vasundharaapps.com/public/image/xr_2.mp4"
+const val fileName = "xr_2.mp4"
 
 lateinit var destURL: String
 

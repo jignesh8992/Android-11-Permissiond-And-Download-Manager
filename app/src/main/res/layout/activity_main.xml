@@ -28,6 +28,16 @@
         android:visibility="visible" />
 
     <Button
+        android:id="@+id/btnPickFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:onClick="onClick"
+        android:text="@string/pick_file"
+        android:textAllCaps="false"
+        android:visibility="visible" />
+
+    <Button
         android:id="@+id/btnAddImageToAlbum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,15 +47,6 @@
         android:textAllCaps="false"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btnPickFile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:onClick="onClick"
-        android:text="@string/pick_file"
-        android:textAllCaps="false"
-        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnWriteRequest"
